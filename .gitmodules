@@ -1,4 +1,3 @@
-# Intel PCM Module
 [submodule "pcm"]
-	path = ./pcm
-	url = https://github.com/intel/pcm.git
+	path = pcm
+	url = https://github.com/intel/pcm
