@@ -23,9 +23,11 @@ endif()
 include_directories(pcm/src)
 link_directories(lib)
 
-add_executable(pcmtimer pcmtimer.cpp)
+add_library(printer STATIC src/printer.cpp)
 
-target_link_libraries(pcmtimer PUBLIC pcm-lib restrictDriverAccess)
+add_executable(pcmtimer src/pcmtimer.cpp)
+
+target_link_libraries(pcmtimer PUBLIC pcm-lib restrictDriverAccess printer)
 
 set_target_properties(pcmtimer PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 
