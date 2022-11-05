@@ -20,7 +20,7 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/pcm/CMakeLists.txt")
     message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif()
 
-include_directories(pcm)
+include_directories(pcm/src)
 link_directories(lib)
 
 add_executable(pcmtimer pcmtimer.cpp)
