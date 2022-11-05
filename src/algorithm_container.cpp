@@ -1,4 +1,7 @@
+#ifndef ALGORITHM_CONTAINER_H
+#define ALGORITHM_CONTAINER_H
 #include <bits/stdc++.h>
+#endif
 
 class algorithm_container
 {
@@ -58,10 +61,10 @@ class algorithm_container
 
         // Update heights
         y->height = max_func(height(y->left),
-                        height(y->right)) +
+                             height(y->right)) +
                     1;
         x->height = max_func(height(x->left),
-                        height(x->right)) +
+                             height(x->right)) +
                     1;
 
         // Return new root
@@ -81,10 +84,10 @@ class algorithm_container
 
         // Update heights
         x->height = max_func(height(x->left),
-                        height(x->right)) +
+                             height(x->right)) +
                     1;
         y->height = max_func(height(y->left),
-                        height(y->right)) +
+                             height(y->right)) +
                     1;
 
         // Return new root
@@ -114,7 +117,7 @@ class algorithm_container
 
         /* 2. Update height of this ancestor node */
         node->height = 1 + max_func(height(node->left),
-                               height(node->right));
+                                    height(node->right));
 
         /* 3. Get the balance factor of this ancestor
             node to check whether this node became

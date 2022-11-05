@@ -1,5 +1,3 @@
-#include <cpucounters.h>
-
 #include "algorithm_container.cpp"
 #include "printer.cpp"
 
