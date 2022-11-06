@@ -23,7 +23,7 @@ endif()
 include_directories(pcm/src)
 link_directories(lib)
 
-add_library(printer STATIC src/printer.cpp)
+add_library(printer src/printer.cpp)
 
 add_executable(pcmtimer src/pcmtimer.cpp)
 
