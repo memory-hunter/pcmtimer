@@ -1,12 +1,7 @@
-#ifndef ALGORITHM_CONTAINER_H
-#define ALGORITHM_CONTAINER_H
-#include <bits/stdc++.h>
-#endif
+#include "algorithm_container.hpp"
 
-class algorithm_container
+class example_algorithm : public algorithm_container
 {
-    // Algorithm classes, fields, methods, etc. goes here.
-
     class Node
     {
     public:
@@ -167,14 +162,11 @@ class algorithm_container
     }
 
 public:
-    algorithm_container() = default;
-    ~algorithm_container() = default;
+    example_algorithm() = default;
+    ~example_algorithm() = default;
 
-    void run()
+    void run() override
     {
-        // Define the algorithm's sample code that needs to be timed.
-        // This is the code that will be timed.
-
         Node *root = nullptr;
         for (int k = 0; k < 1000000; k++)
         {

@@ -23,7 +23,8 @@ endif()
 include_directories(pcm/src)
 link_directories(lib)
 
-add_library(printer src/printer.cpp)
+add_library(printer src/printer.hpp)
+set_target_properties(printer PROPERTIES LINKER_LANGUAGE CXX)
 
 add_executable(pcmtimer src/pcmtimer.cpp)
 

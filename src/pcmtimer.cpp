@@ -1,17 +1,21 @@
-#include "algorithm_container.cpp"
-#include "printer.cpp"
+#include "algorithm_container.hpp"
+#include "example.cpp"
+#include "printer.hpp"
 
-int main() {
+int main()
+{
+    pcm::PCM *m = pcm::PCM::getInstance();
 
-    pcm::PCM* m = pcm::PCM::getInstance();
+    if (m->program() != pcm::PCM::Success)
+        return -1;
 
-    if (m->program() != pcm::PCM::Success) return -1;
-
-    algorithm_container container;
+    example_algorithm *ea = new example_algorithm();
 
     pcm::SystemCounterState before = pcm::getSystemCounterState();
-    container.run();
+    ea->run();
     pcm::SystemCounterState after = pcm::getSystemCounterState();
 
     printer::printSystemCounterStateDiff(before, after);
+
+    delete ea;
 }

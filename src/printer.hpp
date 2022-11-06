@@ -2,7 +2,6 @@
 #define PRINTER_H
 #include <iostream>
 #include <cpucounters.h>
-#endif
 
 namespace printer {
     void printSystemCounterStateDiff(const pcm::SystemCounterState &before, const pcm::SystemCounterState &after){
@@ -16,3 +15,5 @@ namespace printer {
          "\nBytes read from DRAM: " << getBytesReadFromMC(before, after) << std::endl;
     }
 }
+
+#endif
