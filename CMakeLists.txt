@@ -28,7 +28,7 @@ set_target_properties(printer PROPERTIES LINKER_LANGUAGE CXX)
 
 add_executable(pcmtimer src/pcmtimer.cpp)
 
-target_link_libraries(pcmtimer PUBLIC pcm-lib restrictDriverAccess printer)
+target_link_libraries(pcmtimer PUBLIC pcm-lib restrictDriverAccess)
 
 set_target_properties(pcmtimer PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 

@@ -2,6 +2,11 @@
 #include "example.cpp"
 #include "printer.hpp"
 
+void wait() {
+    std::cout << "Press any key to continue... " << std::endl << std::flush;
+    std::cin.ignore(INT32_MAX, '\n');
+}
+
 int main()
 {
     pcm::PCM *m = pcm::PCM::getInstance();
@@ -16,6 +21,8 @@ int main()
     pcm::SystemCounterState after = pcm::getSystemCounterState();
 
     printer::printSystemCounterStateDiff(before, after);
+
+    wait();
 
     delete ea;
 }
