@@ -3,9 +3,12 @@
 #ifndef ALGORITHM_CONTAINER_H
 #define ALGORITHM_CONTAINER_H
 #include <bits/stdc++.h>
+#include <chrono>
+#include <cpucounters.h>
 
-class algorithm_container
-{
+#include "printer.hpp"
+
+class algorithm_container {
 protected:
     algorithm_container() = default;
 public:

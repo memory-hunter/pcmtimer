@@ -24,7 +24,11 @@ include_directories(pcm/src)
 link_directories(lib)
 
 add_library(printer src/printer.hpp)
+add_library(algorithm_container src/algorithm_container.hpp)
+add_library(example src/example.cpp)
 set_target_properties(printer PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(algorithm_container PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(example PROPERTIES LINKER_LANGUAGE CXX)
 
 add_executable(pcmtimer src/pcmtimer.cpp)
 
