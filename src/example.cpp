@@ -249,6 +249,6 @@ public:
 
         printer::printSystemCounterStateDiff(before_sstate, after_sstate);
 
-        // m->cleanup();
+        m->cleanup();
     }
 };
