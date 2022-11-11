@@ -205,7 +205,7 @@ public:
             }
             
         for (int k = 0; k < v1.size(); k++)
-            if (abs(v1[k].first-v[v.size()-1].second) < 50) {
+            if (abs(v1[k].first-v[v.size()-1].second) < 3) {
                 std::cout << "Neighbouring N within 50 found! Running PCM...\n";
                 pcm_runner(&v1[k].second);
                 std::cout << "Done!\n";
@@ -227,6 +227,8 @@ public:
             exit(1);
         }
 
+        auto start = std::chrono::high_resolution_clock::now();
+
         pcm::SystemCounterState before_sstate = pcm::getSystemCounterState();
 
         for (int k = 0; k < 10000; k++)
@@ -240,8 +242,13 @@ public:
 
         pcm::SystemCounterState after_sstate = pcm::getSystemCounterState();
 
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+
+        std::cout << "Runtime was: " << duration.count() << "\n";
+
         printer::printSystemCounterStateDiff(before_sstate, after_sstate);
 
-        m->cleanup();
+        // m->cleanup();
     }
 };
