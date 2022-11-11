@@ -164,9 +164,17 @@ class example_algorithm : public algorithm_container
 public:
     example_algorithm() = default;
     ~example_algorithm() = default;
-
+    
     void run() override
     {
+        static pcm::PCM *m = pcm::PCM::getInstance();
+
+        if (m->program() != pcm::PCM::Success)
+        {
+            std::cout << "Failed to start PCM" << std::endl;
+            exit(1);
+        }
+
         srand(time(nullptr));
         std::fstream file("test_cases.txt", std::ios::out);
         int testCases = 1000;
@@ -174,8 +182,9 @@ public:
         std::vector<std::pair<int, Node>> v1;
         while (testCases--)
         {
-            int n = rand() % 1000000;
             auto start = std::chrono::high_resolution_clock::now();
+            pcm::SystemCounterState before_state = pcm::getSystemCounterState();
+            int n = rand() % 1000000;
             Node *root = nullptr;
             for (int k = 0; k < n; k++)
             {
@@ -189,66 +198,41 @@ public:
                 if (op == 2)
                     root = insert(root, rand() % 2147483647);
             }
+            pcm::SystemCounterState after_state = pcm::getSystemCounterState();
             auto stop = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+            std::cout << "Runtime was: " << duration.count() << " and the n was: " << n << "\n";
+            
+            if (duration.count() > 20000000)
+            {
+                printer::printSystemCounterStateDiff(before_state, after_state);
+                
+            }
 
-            v.push_back(std::make_pair(duration, n));
-            v1.push_back(std::make_pair(n, *root));
+            file << n << " " << duration.count() << "\n";
+
+            // v.push_back(std::make_pair(duration, n));
+            // v1.push_back(std::make_pair(n, *root));
             delete root;
         }
-        sort(v.begin(), v.end());
-        for (int k = 0; k < v.size(); k++)
-            if (v1[k].first == v[v.size()-1].second){
-                std::cout << "Slowest run found! Running PCM...\n";
-                pcm_runner(&v1[k].second);
-                std::cout << "Done!\n";
-            }
-            
-        for (int k = 0; k < v1.size(); k++)
-            if (abs(v1[k].first-v[v.size()-1].second) < 3) {
-                std::cout << "Neighbouring N within 50 found! Running PCM...\n";
-                pcm_runner(&v1[k].second);
-                std::cout << "Done!\n";
-            }
-            
-                
-        file << v[v.size() - 1].second << " " << v[v.size() - 1].first.count() << std::endl;
-        file << v[0].second << " " << v[0].first.count() << std::endl;
-        file.close();
-    }
+        m->cleanup(true);
+        // sort(v.begin(), v.end());
+        // for (int k = 0; k < v.size(); k++)
+        //     if (v1[k].first == v[v.size()-1].second){
+        //         std::cout << "Slowest run found! Running PCM...\n";
+        //         pcm_runner(&v1[k].second);
+        //         std::cout << "Done!\n";
+        //     }
 
-    void pcm_runner(Node* root)
-    {
-        static pcm::PCM *m = pcm::PCM::getInstance();
+        // for (int k = 0; k < v1.size(); k++)
+        //     if (abs(v1[k].first-v[v.size()-1].second) < 50) {
+        //         std::cout << "Neighbouring N within 50 found! Running PCM...\n";
+        //         pcm_runner(&v1[k].second);
+        //         std::cout << "Done!\n";
+        //     }
 
-        if (m->program() != pcm::PCM::Success)
-        {
-            std::cout << "Failed to start PCM" << std::endl;
-            exit(1);
-        }
-
-        auto start = std::chrono::high_resolution_clock::now();
-
-        pcm::SystemCounterState before_sstate = pcm::getSystemCounterState();
-
-        for (int k = 0; k < 10000; k++)
-        {
-            int op = rand() % 3;
-            if (op == 1)
-                bool x = search(root, rand() % 2147483647);
-            if (op == 2)
-                root = insert(root, rand() % 2147483647);
-        }
-
-        pcm::SystemCounterState after_sstate = pcm::getSystemCounterState();
-
-        auto stop = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
-
-        std::cout << "Runtime was: " << duration.count() << "\n";
-
-        printer::printSystemCounterStateDiff(before_sstate, after_sstate);
-
-        // m->cleanup();
+        // file << v[v.size() - 1].second << " " << v[v.size() - 1].first.count() << std::endl;
+        // file << v[0].second << " " << v[0].first.count() << std::endl;
+        // file.close();
     }
 };
