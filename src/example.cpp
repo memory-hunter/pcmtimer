@@ -164,15 +164,31 @@ class example_algorithm : public algorithm_container
 public:
     example_algorithm() = default;
     ~example_algorithm() = default;
-    
+
     void run() override
     {
         static pcm::PCM *m = pcm::PCM::getInstance();
 
-        if (m->program() != pcm::PCM::Success)
+        switch (m->program())
         {
-            std::cout << "Failed to start PCM" << std::endl;
-            exit(1);
+        case pcm::PCM::MSRAccessDenied:
+            std::cout << "Access to Intel(r) Performance Counter Monitor has denied (no MSR or PCI CFG space access)." << "\n";
+            break;
+
+        case pcm::PCM::PMUBusy:
+            std::cout << "Failed to start PCM. PMU is busy." << "\n";
+            std::cout << "Resetting PMU..." << "\n";
+            m->cleanup();
+            break;
+
+        case pcm::PCM::Success:
+            std::cout << "PCM initialized. Running algorithm..." << "\n";
+            break;
+
+        default:
+            std::cout << "Unknown error." << "\n";
+            delete m;
+            exit(-1);
         }
 
         srand(time(nullptr));
@@ -202,37 +218,18 @@ public:
             auto stop = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
             std::cout << "Runtime was: " << duration.count() << " and the n was: " << n << "\n";
-            
+
             if (duration.count() > 20000000)
             {
                 printer::printSystemCounterStateDiff(before_state, after_state);
-                
             }
 
             file << n << " " << duration.count() << "\n";
 
-            // v.push_back(std::make_pair(duration, n));
-            // v1.push_back(std::make_pair(n, *root));
             delete root;
         }
-        m->cleanup(true);
-        // sort(v.begin(), v.end());
-        // for (int k = 0; k < v.size(); k++)
-        //     if (v1[k].first == v[v.size()-1].second){
-        //         std::cout << "Slowest run found! Running PCM...\n";
-        //         pcm_runner(&v1[k].second);
-        //         std::cout << "Done!\n";
-        //     }
-
-        // for (int k = 0; k < v1.size(); k++)
-        //     if (abs(v1[k].first-v[v.size()-1].second) < 50) {
-        //         std::cout << "Neighbouring N within 50 found! Running PCM...\n";
-        //         pcm_runner(&v1[k].second);
-        //         std::cout << "Done!\n";
-        //     }
-
-        // file << v[v.size() - 1].second << " " << v[v.size() - 1].first.count() << std::endl;
-        // file << v[0].second << " " << v[0].first.count() << std::endl;
-        // file.close();
+        file.close();
+        
+        m->cleanup();
     }
 };
