@@ -173,12 +173,14 @@ public:
         {
         case pcm::PCM::MSRAccessDenied:
             std::cout << "Access to Intel(r) Performance Counter Monitor has denied (no MSR or PCI CFG space access)." << "\n";
+            exit(pcm::PCM::MSRAccessDenied);
             break;
 
         case pcm::PCM::PMUBusy:
             std::cout << "Failed to start PCM. PMU is busy." << "\n";
             std::cout << "Resetting PMU..." << "\n";
             m->cleanup();
+            exit(pcm::PCM::PMUBusy);
             break;
 
         case pcm::PCM::Success:
@@ -219,10 +221,8 @@ public:
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
             std::cout << "Runtime was: " << duration.count() << " and the n was: " << n << "\n";
 
-            if (duration.count() > 20000000)
-            {
+            if (duration.count() > 3 * 1e7)
                 printer::printSystemCounterStateDiff(before_state, after_state);
-            }
 
             file << n << " " << duration.count() << "\n";
 
