@@ -73,5 +73,6 @@ _deps
 
 build/
 bin/
+/src/plot/test_cases.txt
 
 # End of https://www.toptal.com/developers/gitignore/api/cmake,c++,visualstudiocode
