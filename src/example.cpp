@@ -200,29 +200,28 @@ public:
         std::vector<std::pair<int, Node>> v1;
         while (testCases--)
         {
-            auto start = std::chrono::high_resolution_clock::now();
-            pcm::SystemCounterState before_state = pcm::getSystemCounterState();
             int n = rand() % 1000000;
             Node *root = nullptr;
             for (int k = 0; k < n; k++)
             {
                 root = insert(root, rand() % INT_MAX);
             }
+            pcm::SystemCounterState before_state = pcm::getSystemCounterState();
+            auto start = std::chrono::high_resolution_clock::now();
             for (int k = 0; k < 10000; k++)
             {
                 int op = rand() % 3;
                 if (op == 1)
-                    bool x = search(root, rand() % 2147483647);
+                    bool x = search(root, rand() % INT_MAX);
                 if (op == 2)
-                    root = insert(root, rand() % 2147483647);
+                    root = insert(root, rand() % INT_MAX);
             }
-            pcm::SystemCounterState after_state = pcm::getSystemCounterState();
             auto stop = std::chrono::high_resolution_clock::now();
+            pcm::SystemCounterState after_state = pcm::getSystemCounterState();
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
             std::cout << "Runtime was: " << duration.count() << " and the n was: " << n << "\n";
 
-            if (duration.count() > 3 * 1e7)
-                printer::printSystemCounterStateDiff(before_state, after_state);
+            printer::printSystemCounterStateDiff(before_state, after_state);
 
             file << n << " " << duration.count() << "\n";
 
