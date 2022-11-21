@@ -8,12 +8,14 @@ void wait() {
 }
 
 int main() {
+
+    pcm::PCM *m = pcm::PCM::getInstance();
+    m->enableForceRTMAbortMode();
+    m->checkError(m->program());
+
     example_algorithm *ea = new example_algorithm();
-
     std::cout << "Starting example algorithm...\n";
-
     ea->run();
-
     std::cout << "Example algorithm finished.\n";
 
     std::filesystem::path cd = std::filesystem::current_path();
@@ -22,4 +24,5 @@ int main() {
     wait();
 
     delete ea;
+    delete m;
 }

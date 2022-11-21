@@ -167,31 +167,8 @@ public:
 
     void run() override
     {
-        static pcm::PCM *m = pcm::PCM::getInstance();
 
-        switch (m->program())
-        {
-        case pcm::PCM::MSRAccessDenied:
-            std::cout << "Access to Intel(r) Performance Counter Monitor has denied (no MSR or PCI CFG space access)." << "\n";
-            exit(pcm::PCM::MSRAccessDenied);
-            break;
-
-        case pcm::PCM::PMUBusy:
-            std::cout << "Failed to start PCM. PMU is busy." << "\n";
-            std::cout << "Resetting PMU..." << "\n";
-            m->cleanup();
-            exit(pcm::PCM::PMUBusy);
-            break;
-
-        case pcm::PCM::Success:
-            std::cout << "PCM initialized. Running algorithm..." << "\n";
-            break;
-
-        default:
-            std::cout << "Unknown error." << "\n";
-            delete m;
-            exit(-1);
-        }
+        pcm::PCM *m = pcm::PCM::getInstance();
 
         srand(time(nullptr));
         std::fstream file("test_cases.txt", std::ios::out);
