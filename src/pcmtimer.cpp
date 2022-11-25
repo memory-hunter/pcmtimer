@@ -20,6 +20,8 @@ int main() {
 
     std::filesystem::path cd = std::filesystem::current_path();
     std::filesystem::rename(cd / "test_cases.txt", cd.parent_path().parent_path() / "src" / "plot" / "test_cases.txt");
+    std::filesystem::rename(cd / "good_runs.txt", cd.parent_path().parent_path() / "src" / "plot" / "good_runs.txt");
+    std::filesystem::rename(cd / "bad_runs.txt", cd.parent_path().parent_path() / "src" / "plot" / "bad_runs.txt");
 
     wait();
 
