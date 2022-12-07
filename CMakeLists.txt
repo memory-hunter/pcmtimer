@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.23)
 project(pcmtimer)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Git QUIET)
 if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
@@ -23,16 +24,22 @@ endif()
 include_directories(pcm/src)
 link_directories(lib)
 
-add_library(printer src/printer.hpp)
-add_library(algorithm_container src/algorithm_container.hpp)
-add_library(example src/example.cpp)
-set_target_properties(printer PROPERTIES LINKER_LANGUAGE CXX)
-set_target_properties(algorithm_container PROPERTIES LINKER_LANGUAGE CXX)
-set_target_properties(example PROPERTIES LINKER_LANGUAGE CXX)
-
 add_executable(pcmtimer src/pcmtimer.cpp)
 
+add_library(printer src/printer.hpp)
+add_library(algorithm_container src/algorithm_container.hpp)
+add_library(avl src/avl.cpp)
+add_library(bubblesort src/bubblesort.cpp)
+add_library(quicksort src/quicksort.cpp)
+set_target_properties(printer PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(algorithm_container PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(avl PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(bubblesort PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(quicksort PROPERTIES LINKER_LANGUAGE CXX)
+
 target_link_libraries(pcmtimer PUBLIC pcm-lib restrictDriverAccess)
+
+add_compile_options(-O0)
 
 set_target_properties(pcmtimer PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 

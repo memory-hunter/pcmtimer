@@ -1,10 +1,12 @@
-#include "example.cpp"
+#include "quicksort.cpp"
+#include "bubblesort.cpp"
+#include "avl.cpp"
 
 #include <filesystem>
 
 void wait() {
-    std::cout << "Press any key to continue... " << std::endl << std::flush;
-    std::cin.ignore(INT32_MAX, '\n');
+    std::cout << "Press any key to continue... " << std::endl;
+    std::cin.ignore(LLONG_MAX, '\n');
 }
 
 int main() {
@@ -13,18 +15,16 @@ int main() {
     m->enableForceRTMAbortMode();
     m->checkError(m->program());
 
-    example_algorithm *ea = new example_algorithm();
-    std::cout << "Starting example algorithm...\n";
-    ea->run();
-    std::cout << "Example algorithm finished.\n";
+    avl_tree* algo = new avl_tree();
+    algo->run();
 
     std::filesystem::path cd = std::filesystem::current_path();
     std::filesystem::rename(cd / "test_cases.txt", cd.parent_path().parent_path() / "src" / "plot" / "test_cases.txt");
-    std::filesystem::rename(cd / "good_runs.txt", cd.parent_path().parent_path() / "src" / "plot" / "good_runs.txt");
-    std::filesystem::rename(cd / "bad_runs.txt", cd.parent_path().parent_path() / "src" / "plot" / "bad_runs.txt");
+    // std::filesystem::rename(cd / "good_runs.txt", cd.parent_path().parent_path() / "src" / "plot" / "good_runs.txt");
+    // std::filesystem::rename(cd / "bad_runs.txt", cd.parent_path().parent_path() / "src" / "plot" / "bad_runs.txt");
 
     wait();
 
-    delete ea;
+    delete algo;
     delete m;
 }

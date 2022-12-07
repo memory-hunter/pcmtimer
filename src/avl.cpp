@@ -1,6 +1,6 @@
 #include "algorithm_container.hpp"
 
-class example_algorithm : public algorithm_container
+class avl_tree : public algorithm_container
 {
     class Node
     {
@@ -162,50 +162,42 @@ class example_algorithm : public algorithm_container
     }
 
 public:
-    example_algorithm() = default;
-    ~example_algorithm() = default;
+    avl_tree() : algorithm_container() {}
+    ~avl_tree() = default;
 
     void run() override
     {
-
         pcm::PCM *m = pcm::PCM::getInstance();
-
-        srand(time(nullptr));
         std::fstream file("test_cases.txt", std::ios::out);
         int testCases = 1000;
-        std::vector<std::pair<std::chrono::nanoseconds, int>> v;
-        std::vector<std::pair<int, Node>> v1;
         while (testCases--)
         {
-            int n = rand() % 1000000;
+            int n = big_dis(gen);
             Node *root = nullptr;
             for (int k = 0; k < n; k++)
             {
-                root = insert(root, rand() % INT_MAX);
+                root = insert(root, big_dis(gen));
             }
             pcm::SystemCounterState before_state = pcm::getSystemCounterState();
             auto start = std::chrono::high_resolution_clock::now();
             for (int k = 0; k < 10000; k++)
             {
-                int op = rand() % 3;
+                int op = small_dis(gen) % 3;
                 if (op == 1)
-                    bool x = search(root, rand() % INT_MAX);
+                    bool x = search(root, big_dis(gen));
                 if (op == 2)
-                    root = insert(root, rand() % INT_MAX);
+                    root = insert(root, big_dis(gen));
             }
             auto stop = std::chrono::high_resolution_clock::now();
             pcm::SystemCounterState after_state = pcm::getSystemCounterState();
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
-            std::cout << "Runtime was: " << duration.count() << " and the n was: " << n << "\n";
 
-            printer::printSystemCounterStateDiff(before_state, after_state);
-
-            file << n << " " << duration.count() << "\n";
+            printer::log(n, duration, before_state, after_state);
+            printer::log(n, duration, before_state, after_state, file);
 
             delete root;
         }
+
         file.close();
-        
-        m->cleanup();
     }
 };
