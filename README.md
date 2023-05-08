@@ -21,4 +21,4 @@ This code is provided as my and my coursemates' bachelor's thesis work at [Kutai
 
 # Credits
 - Mentor: [Wolfgang J. Paul](https://ieeexplore.ieee.org/author/37387171500)
-- Students: Davit Petriashvili, Lasha Kvatashidze
+- Students: [Davit Petriashvili](https://www.linkedin.com/in/memoryhunter/), [Lasha Kvatashidze](https://www.linkedin.com/in/lasha-kvatashidze-75b980219/)
