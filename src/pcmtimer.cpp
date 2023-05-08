@@ -1,30 +1,32 @@
-#include "quicksort.cpp"
-#include "bubblesort.cpp"
-#include "avl.cpp"
-
 #include <filesystem>
+#include <memory>
+#include <iostream>
+#include <cpucounters.h>
+
+#include "runner.cpp"
+#include "algorithm_definitions.h"
+
+using pcm::PCM;
 
 void wait() {
-    std::cout << "Press any key to continue... " << std::endl;
-    std::cin.ignore(LLONG_MAX, '\n');
+    std::cout << "Timing completed. Results are saved in 'test_cases.txt'\n";
+    std::cin.get();
 }
 
 int main() {
 
-    pcm::PCM *m = pcm::PCM::getInstance();
+    std::shared_ptr<PCM> m;
+    m.reset(PCM::getInstance());
     m->enableForceRTMAbortMode();
     m->checkError(m->program());
 
-    avl_tree* algo = new avl_tree();
-    algo->run();
+    std::unique_ptr<runner> r(new runner(100000, 500));
+    r->run(new algorithms::quick_sort());
+    r.reset();
 
     std::filesystem::path cd = std::filesystem::current_path();
-    std::filesystem::rename(cd / "test_cases.txt", cd.parent_path().parent_path() / "src" / "plot" / "test_cases.txt");
-    // std::filesystem::rename(cd / "good_runs.txt", cd.parent_path().parent_path() / "src" / "plot" / "good_runs.txt");
-    // std::filesystem::rename(cd / "bad_runs.txt", cd.parent_path().parent_path() / "src" / "plot" / "bad_runs.txt");
+    std::filesystem::rename(cd / "test_cases.txt", cd.parent_path().parent_path() / "plot" / "test_cases.txt");
 
     wait();
 
-    delete algo;
-    delete m;
 }
