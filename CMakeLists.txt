@@ -4,6 +4,7 @@ project(pcmtimer VERSION 1.0)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(PCM_DIR ${PROJECT_SOURCE_DIR}/pcm)
+option(PCM_BUILD "Build the PCM library" OFF) # OFF for default
 
 # Check and update for PCM if available
 find_package(Git QUIET)
@@ -21,6 +22,11 @@ if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
     if(NOT EXISTS "${PROJECT_SOURCE_DIR}/pcm/CMakeLists.txt")
         message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
     endif()
+endif()
+
+# Build the PCM library
+if(PCM_BUILD)
+    add_subdirectory(${PCM_DIR})
 endif()
 
 #Linking, includes and etc.
