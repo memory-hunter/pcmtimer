@@ -188,4 +188,6 @@ _deps
 # External projects
 *-prefix/
 
+.idea
+
 # End of https://www.toptal.com/developers/gitignore/api/cmake,c++,visualstudiocode
