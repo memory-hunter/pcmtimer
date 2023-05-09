@@ -49,6 +49,15 @@ target_include_directories(pcmtimer PUBLIC src/include src/include/algorithm ${P
 target_include_directories(runner PUBLIC src/include/ src/include/algorithm ${PCM_DIR}/src)
 target_link_libraries(pcmtimer PUBLIC pcm-lib restrictDriverAccess)
 
+#Build the PCM if the .dll doesn't exist (for it to be up-to-date)
+if (NOT EXISTS ${PROJECT_SOURCE_DIR}/required/pcm-lib.dll)
+    add_subdirectory(${PCM_DIR})
+    add_custom_command(TARGET pcmtimer PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_BINARY_DIR}/bin/$<CONFIG>/pcm-lib.dll"
+            "${PROJECT_SOURCE_DIR}/required/")
+endif()
+
 # Copy the required files for the pcmtimer.exe
 add_custom_command(TARGET pcmtimer POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
@@ -57,4 +66,4 @@ add_custom_command(TARGET pcmtimer POST_BUILD
 add_custom_command(TARGET pcmtimer POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${PROJECT_SOURCE_DIR}/required/pcm-lib.dll"
-        $<TARGET_FILE_DIR:pcmtimer>)
+        "$<TARGET_FILE_DIR:pcmtimer>")
