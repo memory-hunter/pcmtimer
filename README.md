@@ -17,7 +17,7 @@ This code is provided as my and my coursemates' bachelor's thesis work at [Kutai
 - Clone the repository recursively using the `git clone --recursive` command.
 - Open the project using your IDE of choice (which has a way to build using [CMake](https://cmake.org/)).
 - Build the project.
-- Run the `pcmtimer.exe` from the `{root}/bin/{runtime}/` directory with administrator privilleges.
+- Run the `pcmtimer.exe` from the `{project_root}/bin/{config}/` directory with administrator privilleges.
 
 # Credits
 - Mentor: [Wolfgang J. Paul](https://ieeexplore.ieee.org/author/37387171500)
