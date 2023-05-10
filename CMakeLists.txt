@@ -8,26 +8,26 @@ option(PCM_BUILD "Build the PCM library" OFF) # OFF for default
 
 # Check and update for PCM if available
 find_package(Git QUIET)
-if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
+if (GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
     option(GIT_SUBMODULE "Check submodules during build" ON)
-    if(GIT_SUBMODULE)
+    if (GIT_SUBMODULE)
         message(STATUS "Submodule update")
         execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                        RESULT_VARIABLE GIT_SUBMOD_RESULT)
-        if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                RESULT_VARIABLE GIT_SUBMOD_RESULT)
+        if (NOT GIT_SUBMOD_RESULT EQUAL "0")
             message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
-        endif()
-    endif()
-    if(NOT EXISTS "${PROJECT_SOURCE_DIR}/pcm/CMakeLists.txt")
+        endif ()
+    endif ()
+    if (NOT EXISTS "${PROJECT_SOURCE_DIR}/pcm/CMakeLists.txt")
         message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
-    endif()
-endif()
+    endif ()
+endif ()
 
 # Build the PCM library
-if(PCM_BUILD)
+if (PCM_BUILD)
     add_subdirectory(${PCM_DIR})
-endif()
+endif ()
 
 #Linking, includes and etc.
 add_executable(pcmtimer src/pcmtimer.cpp)
@@ -43,27 +43,38 @@ set_target_properties(algorithm_definitions PROPERTIES LINKER_LANGUAGE CXX)
 add_library(time_units STATIC src/include/time_units.h)
 set_target_properties(time_units PROPERTIES LINKER_LANGUAGE CXX)
 
+#Build the PCM if the .dll or .libs doesn't exist (for it to be up-to-date)
+if (NOT EXISTS ${PROJECT_SOURCE_DIR}/required/pcm-lib.dll
+        OR NOT EXISTS ${PROJECT_SOURCE_DIR}/lib/pcm-lib.lib
+        OR NOT EXISTS ${PROJECT_SOURCE_DIR}/lib/restrictDriverAccess.lib)
+    add_custom_command(TARGET pcmtimer PRE_BUILD
+            COMMAND ${CMAKE_COMMAND} -E echo "Required files not found in their respective directories. Copying... ")
+    add_subdirectory(${PCM_DIR})
+    add_custom_command(TARGET pcmtimer PRE_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_BINARY_DIR}/bin/$<CONFIG>/pcm-lib.dll"
+            "${PROJECT_SOURCE_DIR}/required/")
+    add_custom_command(TARGET pcmtimer PRE_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_BINARY_DIR}/pcm/src/restrictDriverAccess.dir/$<CONFIG>/restrictDriverAccess.lib"
+            "${PROJECT_SOURCE_DIR}/lib/")
+    add_custom_command(TARGET pcmtimer PRE_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_BINARY_DIR}/pcm/src/$<CONFIG>/pcm-lib.lib"
+            "${PROJECT_SOURCE_DIR}/lib/")
+endif ()
 
 target_link_directories(pcmtimer PUBLIC ${PROJECT_SOURCE_DIR}/lib)
 target_include_directories(pcmtimer PUBLIC src/include src/include/algorithm ${PCM_DIR}/src)
 target_include_directories(runner PUBLIC src/include/ src/include/algorithm ${PCM_DIR}/src)
 target_link_libraries(pcmtimer PUBLIC pcm-lib restrictDriverAccess)
 
-#Build the PCM if the .dll doesn't exist (for it to be up-to-date)
-if (NOT EXISTS ${PROJECT_SOURCE_DIR}/required/pcm-lib.dll)
-    add_subdirectory(${PCM_DIR})
-    add_custom_command(TARGET pcmtimer PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${CMAKE_BINARY_DIR}/bin/$<CONFIG>/pcm-lib.dll"
-            "${PROJECT_SOURCE_DIR}/required/")
-endif()
-
 # Copy the required files for the pcmtimer.exe
 add_custom_command(TARGET pcmtimer POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${PROJECT_SOURCE_DIR}/required/MSR.sys"
         $<TARGET_FILE_DIR:pcmtimer>)
 add_custom_command(TARGET pcmtimer POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${PROJECT_SOURCE_DIR}/required/pcm-lib.dll"
         "$<TARGET_FILE_DIR:pcmtimer>")
