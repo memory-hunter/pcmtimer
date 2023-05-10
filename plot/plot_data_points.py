@@ -13,13 +13,25 @@ with open("test_cases.txt", "r") as f:
         runtime.append(int(line.split()[1]))
         l2.append(float(line.split()[2]))
         l3.append(float(line.split()[3]))
+    
+    n = np.array(n)
+    runtime = np.array(runtime)
+    l2 = np.array(l2)
+    l3 = np.array(l3)
 
-fig, ax = plt.subplots(3)
+test_case_max_limit = 100000
+x = np.linspace(1, test_case_max_limit, test_case_max_limit)
+y_logn, y_n, y_nlogn = np.log(x), x, x*np.log(x)
 
-runtime = np.array(runtime)
-n = np.array(n)
-
-ax[0].scatter(n, runtime, color='green', label='Runtime', s=2)
-ax[1].scatter(n, l2, color='blue', label='L2', s=2)
-ax[2].scatter(n, l3, color='black', label='L3', s=2)
+plt.plot(x, y_logn, color='red', label='log(n)')
+plt.plot(x, y_n, color='green', label='n')
+plt.plot(x, y_nlogn, color='blue', label='nlog(n)')
+plt.gca().set_aspect('equal', adjustable='box') # This line fixed the plotting beingd weirdly
+plt.grid()
+plt.scatter(n, runtime, color='black', label='Runtime', s=3)
+plt.legend()
+plt.show()
+plt.scatter(n, l2, color='red', label='L2', s=1)
+plt.scatter(n, l3, color='cyan', label='L3', s=1)
+plt.legend()
 plt.show()
