@@ -47,20 +47,21 @@ set_target_properties(time_units PROPERTIES LINKER_LANGUAGE CXX)
 if (NOT EXISTS ${PROJECT_SOURCE_DIR}/required/pcm-lib.dll
         OR NOT EXISTS ${PROJECT_SOURCE_DIR}/lib/pcm-lib.lib
         OR NOT EXISTS ${PROJECT_SOURCE_DIR}/lib/restrictDriverAccess.lib)
-    add_custom_command(TARGET pcmtimer PRE_BUILD
-            COMMAND ${CMAKE_COMMAND} -E echo "Required files not found in their respective directories. Copying... ")
     add_subdirectory(${PCM_DIR})
     add_custom_command(TARGET pcmtimer PRE_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${CMAKE_BINARY_DIR}/bin/$<CONFIG>/pcm-lib.dll"
+            "${PROJECT_BINARY_DIR}/bin/$<CONFIG>/pcm-lib.dll"
             "${PROJECT_SOURCE_DIR}/required/")
+        add_custom_command(TARGET pcmtimer PRE_BUILD
+                COMMAND ${CMAKE_COMMAND} -E make_directory
+                "${PROJECT_SOURCE_DIR}/lib/")
     add_custom_command(TARGET pcmtimer PRE_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${CMAKE_BINARY_DIR}/pcm/src/restrictDriverAccess.dir/$<CONFIG>/restrictDriverAccess.lib"
+            "${PROJECT_BINARY_DIR}/pcm/src/restrictDriverAccess.dir/$<CONFIG>/restrictDriverAccess.lib"
             "${PROJECT_SOURCE_DIR}/lib/")
     add_custom_command(TARGET pcmtimer PRE_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${CMAKE_BINARY_DIR}/pcm/src/$<CONFIG>/pcm-lib.lib"
+            "${PROJECT_BINARY_DIR}/pcm/src/$<CONFIG>/pcm-lib.lib"
             "${PROJECT_SOURCE_DIR}/lib/")
 endif ()
 
