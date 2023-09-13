@@ -21,7 +21,7 @@ int main() {
     m->checkError(m->program());
 
     std::unique_ptr<runner> r(new runner(100000, 500));
-    r->run(new algorithms::quick_sort());
+    r->run(new algorithms::Dijkstra());
     r.reset();
 
     std::filesystem::path cd = std::filesystem::current_path();

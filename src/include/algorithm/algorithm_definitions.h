@@ -16,7 +16,7 @@ namespace algorithms {
     class Dijkstra : public algorithm_module {
         long MAX_VALUE = UINT32_MAX;
 
-        std::vector<long> dijsktra(int &start,  std::vector<std::vector<std::pair<long, long>>> &g) {
+        std::vector<long> dijkstra(int &start,  std::vector<std::vector<std::pair<long, long>>> &g) {
             std::vector<long> dist(g.size(), MAX_VALUE);
             std::set<std::pair<long,long>> st;
 
@@ -63,7 +63,7 @@ namespace algorithms {
 
             int start = dist_small(gen);
 
-            dijsktra(start, g);
+            dijkstra(start, g);
 
             return vertex;
         }
