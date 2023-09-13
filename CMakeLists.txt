@@ -29,20 +29,6 @@ if (PCM_BUILD)
     add_subdirectory(${PCM_DIR})
 endif ()
 
-#Linking, includes and etc.
-add_executable(pcmtimer src/pcmtimer.cpp)
-set_target_properties(pcmtimer PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
-
-add_library(runner STATIC src/runner.cpp)
-add_library(printer STATIC src/include/printer.h)
-set_target_properties(printer PROPERTIES LINKER_LANGUAGE CXX)
-add_library(algorithm_module STATIC src/include/algorithm/algorithm_module.h)
-set_target_properties(algorithm_module PROPERTIES LINKER_LANGUAGE CXX)
-add_library(algorithm_definitions STATIC src/include/algorithm/algorithm_definitions.h)
-set_target_properties(algorithm_definitions PROPERTIES LINKER_LANGUAGE CXX)
-add_library(time_units STATIC src/include/time_units.h)
-set_target_properties(time_units PROPERTIES LINKER_LANGUAGE CXX)
-
 #Build the PCM if the .dll or .libs doesn't exist (for it to be up-to-date)
 if (NOT EXISTS ${PROJECT_SOURCE_DIR}/required/pcm-lib.dll
         OR NOT EXISTS ${PROJECT_SOURCE_DIR}/lib/pcm-lib.lib
@@ -65,10 +51,12 @@ if (NOT EXISTS ${PROJECT_SOURCE_DIR}/required/pcm-lib.dll
             "${PROJECT_SOURCE_DIR}/lib/")
 endif ()
 
-target_link_directories(pcmtimer PUBLIC ${PROJECT_SOURCE_DIR}/lib)
-target_include_directories(pcmtimer PUBLIC src/include src/include/algorithm ${PCM_DIR}/src)
-target_include_directories(runner PUBLIC src/include/ src/include/algorithm ${PCM_DIR}/src)
-target_link_libraries(pcmtimer PUBLIC pcm-lib restrictDriverAccess)
+add_executable(pcmtimer src/pcmtimer.cpp)
+target_sources(pcmtimer PRIVATE src/runner.cpp src/algorithms/avl_trees.cpp src/algorithms/quick_sort.cpp src/algorithms/dijsktra.cpp)
+target_link_directories(pcmtimer PRIVATE ${PROJECT_SOURCE_DIR}/lib)
+target_link_libraries(pcmtimer PRIVATE pcm-lib restrictDriverAccess)
+target_include_directories(pcmtimer PRIVATE src/include src/algorithms ${PCM_DIR}/src)
+set_target_properties(pcmtimer PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 
 # Copy the required files for the pcmtimer.exe
 add_custom_command(TARGET pcmtimer POST_BUILD

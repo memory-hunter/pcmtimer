@@ -1,5 +1,3 @@
-#include <random>
-
 #include "runner.h"
 
 runner::runner(int test_cases) : runner(100, 100000, test_cases) {}

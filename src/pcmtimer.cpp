@@ -3,15 +3,13 @@
 #include <iostream>
 #include <cpucounters.h>
 
-#include "runner.cpp"
-#include "algorithm_definitions.h"
+#include "runner.h"
+
+#include "avl_trees.cpp"
+#include "quick_sort.cpp"
+#include "dijsktra.cpp"
 
 using pcm::PCM;
-
-void wait() {
-    std::cout << "Timing completed. Results are saved in 'test_cases.txt'\n";
-    std::cin.get();
-}
 
 int main() {
 
@@ -21,12 +19,9 @@ int main() {
     m->checkError(m->program());
 
     std::unique_ptr<runner> r(new runner(100000, 500));
-    r->run(new algorithms::Dijkstra());
+    r->run(new dijkstra());
     r.reset();
 
     std::filesystem::path cd = std::filesystem::current_path();
     std::filesystem::rename(cd / "test_cases.txt", cd.parent_path().parent_path() / "plot" / "test_cases.txt");
-
-    wait();
-
 }
