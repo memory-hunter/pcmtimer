@@ -5,10 +5,70 @@
 
 #include <algorithm>
 #include <array>
+#include <vector>
+#include <set>
 
 #include "algorithm_module.h"
 
 namespace algorithms {
+    // Given N vertices of the weighed graph. Some of them are connected by the edge. Given start vertex. Find the minimum distance to every vertex from start
+
+    class Dijkstra : public algorithm_module {
+        long MAX_VALUE = UINT32_MAX;
+
+        std::vector<long> dijsktra(int &start,  std::vector<std::vector<std::pair<long, long>>> &g) {
+            std::vector<long> dist(g.size(), MAX_VALUE);
+            std::set<std::pair<long,long>> st;
+
+            dist[start] = 0;
+            for (int i = 0; i < dist.size(); i++) {
+                st.insert({dist[i],i});
+            }
+
+            while (!st.empty()) {
+                std::pair < long, long > fr=(*st.begin());
+                st.erase(st.begin());
+                long v=fr.second;
+
+                for (int k=0; k<g[v].size(); k++) {
+                    long to=g[v][k].first;
+
+                    if (dist[v] + g[v][k].second < dist[to]) {
+                        st.erase({dist[to],to});
+                        dist[to]=dist[v] + g[v][k].second;
+                        st.insert({dist[to],to});
+                    }
+                }
+            }
+            return dist;
+        }
+
+
+    public:
+        int run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big,
+                std::mt19937 &gen) override {
+            int vertex = dist_big(gen);
+            int nodes = dist_big(gen);
+
+            std::vector<std::vector<std::pair<long, long>>> g;
+            g.resize(vertex);
+
+            for (int i = 0; i < nodes; i++) {
+                int f = dist_big(gen);
+                int s = dist_big(gen);
+                int price = dist_small(gen);
+                g[f].push_back({s,price});
+                g[s].push_back({f,price});
+            }
+
+            int start = dist_small(gen);
+
+            dijsktra(start, g);
+
+            return vertex;
+        }
+    };
+
     class quick_sort : public algorithm_module {
         int partition(int *arr, int low, int high) {
             int pivot = arr[high];
@@ -49,26 +109,6 @@ namespace algorithms {
         }
     };
 
-    class bubble_sort : public algorithm_module {
-    public:
-        bubble_sort() : algorithm_module() {}
-
-        ~bubble_sort() = default;
-
-        int run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big,
-                std::mt19937 &gen) override {
-            int n = dist_big(gen);
-            int *arr = new int[n];
-            for (int j = 0; j < n; j++)
-                arr[j] = dist_big(gen);
-            for (int i = 0; i < n - 1; i++)
-                for (int j = 0; j < n - i - 1; j++)
-                    if (arr[j] > arr[j + 1])
-                        std::swap(arr[j], arr[j + 1]);
-            delete[] arr;
-            return n;
-        }
-    };
 
     class avl_trees : public algorithm_module {
         class Node {
