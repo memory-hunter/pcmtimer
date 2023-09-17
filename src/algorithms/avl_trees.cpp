@@ -1,9 +1,7 @@
 #include "algorithm_module.h"
 
-class avl_trees : public algorithm_module
-{
-    class Node
-    {
+class avl_trees : public algorithm_module {
+    class Node {
     public:
         int key;
         Node *left;
@@ -11,15 +9,13 @@ class avl_trees : public algorithm_module
         int height;
     };
 
-    int height(Node *N)
-    {
+    int height(Node *N) {
         if (N == nullptr)
             return 0;
         return N->height;
     }
 
-    Node *newNode(int key)
-    {
+    Node *newNode(int key) {
         Node *node = new Node();
         node->key = key;
         node->left = nullptr;
@@ -28,8 +24,7 @@ class avl_trees : public algorithm_module
         return node;
     }
 
-    Node *rightRotate(Node *y)
-    {
+    Node *rightRotate(Node *y) {
         Node *x = y->left;
         Node *T2 = x->right;
         x->right = y;
@@ -39,8 +34,7 @@ class avl_trees : public algorithm_module
         return x;
     }
 
-    Node *leftRotate(Node *x)
-    {
+    Node *leftRotate(Node *x) {
         Node *y = x->right;
         Node *T2 = y->left;
         y->left = x;
@@ -50,15 +44,13 @@ class avl_trees : public algorithm_module
         return y;
     }
 
-    int getBalance(Node *N)
-    {
+    int getBalance(Node *N) {
         if (N == nullptr)
             return 0;
         return height(N->left) - height(N->right);
     }
 
-    Node *insert(Node *node, int key)
-    {
+    Node *insert(Node *node, int key) {
         if (node == nullptr)
             return (newNode(key));
         if (key < node->key)
@@ -73,21 +65,18 @@ class avl_trees : public algorithm_module
             return rightRotate(node);
         if (balance < -1 && key > node->right->key)
             return leftRotate(node);
-        if (balance > 1 && key > node->left->key)
-        {
+        if (balance > 1 && key > node->left->key) {
             node->left = leftRotate(node->left);
             return rightRotate(node);
         }
-        if (balance < -1 && key < node->right->key)
-        {
+        if (balance < -1 && key < node->right->key) {
             node->right = rightRotate(node->right);
             return leftRotate(node);
         }
         return node;
     }
 
-    bool search(Node *root, int val)
-    {
+    bool search(Node *root, int val) {
         if (root == nullptr)
             return false;
         if (root->key == val)
@@ -105,8 +94,7 @@ public:
     ~avl_trees() = default;
 
     int run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big,
-            std::mt19937 &gen) override
-    {
+            std::mt19937 &gen) override {
         int n = dist_big(gen);
         Node *root = nullptr;
         for (int j = 0; j < n; j++)
