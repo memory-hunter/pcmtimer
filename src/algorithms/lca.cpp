@@ -5,6 +5,7 @@
 class lca : public algorithm_module {
 
     class random_tree {
+
         // using Prufer's algorithm to create random tree
         std::vector<std::vector<int>> getTreeEdges(std::vector<int> prufer, int m) {
             int nodes = m + 2;
@@ -26,16 +27,21 @@ class lca : public algorithm_module {
                 }
             }
 
-            int j = 0;
+            int j = 0; int lastNode = -1; int lastNode1 = -1;
             // For the last element
             for (int i = 0; i < nodes; i++) {
                 if (node_set[i] == 0 && j == 0) {
-
-                    cout << "(" << (i + 1) << ", ";
+                    lastNode = i+1;
                     j++;
-                } else if (node_set[i] == 0 && j == 1)
-                    cout << (i + 1) << ")\n";
+                } else if (node_set[i] == 0 && j == 1) {
+                    lastNode1 = i+1;
+                }
             }
+
+            randomTree[lastNode].push_back(lastNode1);
+            randomTree[lastNode1].push_back(lastNode);
+
+            return randomTree;
         }
 
         int ran(int l, int r) {
