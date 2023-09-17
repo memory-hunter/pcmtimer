@@ -88,7 +88,7 @@ class avl_trees : public algorithm_module {
         return false;
     }
     
-    Node *root;
+    Node *root = nullptr;
     int n{};
 
 public:
@@ -102,8 +102,7 @@ public:
         return n;
     }
 
-    void setup(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big,
-            std::mt19937 &gen) override {
+    void setup(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) override {
         n = dist_big(gen);
         for (int j = 0; j < n; j++)
             root = insert(root, dist_big(gen));

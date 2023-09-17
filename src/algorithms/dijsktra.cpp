@@ -3,7 +3,7 @@
 #include <set>
 
 class dijkstra : public algorithm_module {
-    std::vector<long> dijkstra_seek(int &start, std::vector<std::vector<std::pair<long, long>>> &g) {
+    void dijkstra_seek(int &start) {
         std::vector<long> dist(g.size(), INT64_MAX);
         std::set<std::pair<long, long>> st;
 
@@ -26,34 +26,34 @@ class dijkstra : public algorithm_module {
                 }
             }
         }
-
-        return dist;
     }
 
-    int start{}, vertex{}, nodes{};
+    int start{}, nodes{}, edges{};
     std::vector<std::vector<std::pair<long, long>>> g{};
 
 public:
+
     int run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) override {
-        dijkstra_seek(start, g);
-        return vertex;
+        dijkstra_seek(start);
+        return nodes;
     }
 
     void setup(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big,
         std::mt19937 &gen) override {
-        vertex = dist_big(gen);
-        nodes = dist_big(gen) % vertex;
+        nodes = dist_big(gen);
+        edges = dist_big(gen) % (nodes*(nodes-1)/2);
 
-        g.resize(vertex);
+        g.clear();
+        g.resize(nodes);
 
-        for (int i = 0; i < nodes; i++) {
-            int f = dist_big(gen) % vertex;
-            int s = dist_big(gen) % vertex;
+        for (int i = 0; i < edges; i++) {
+            int f = dist_big(gen) % nodes;
+            int s = dist_big(gen) % nodes;
             int price = dist_small(gen);
             g[f].push_back({s, price});
             g[s].push_back({f, price});
         }
 
-        int start = dist_small(gen) % vertex;
+        start = dist_big(gen) % nodes;
     }
 };

@@ -8,6 +8,7 @@
 #include "avl_trees.cpp"
 #include "quick_sort.cpp"
 #include "dijsktra.cpp"
+#include "lca.cpp"
 
 using pcm::PCM;
 
@@ -18,8 +19,8 @@ int main() {
     m->enableForceRTMAbortMode();
     m->checkError(m->program());
 
-    std::unique_ptr<runner> r(new runner(100000, 500));
-    r->run(new dijkstra());
+    std::unique_ptr<runner> r(new runner(100000, 5));
+    r->run(new lca());
     r.reset();
 
     std::filesystem::path cd = std::filesystem::current_path();

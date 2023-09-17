@@ -123,6 +123,18 @@ public:
 
     void setup(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) override {
         nodes = dist_big(gen);
+
+        lg = log2(nodes+1);
+        std::cout << lg << "\n";
+
+        dp.resize(nodes+1);
+        for (int k=0; k<=nodes; k++) {
+            dp[k].resize(lg+1);
+        }
+        time_in.resize(nodes+1);
+        time_out.resize(nodes+1);
+        parent.resize(nodes+1);
+        
         tree = random_tree::getRandomTree(nodes);
         DFS(0, -1);
     }
