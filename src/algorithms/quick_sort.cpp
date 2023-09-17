@@ -22,19 +22,25 @@ class quick_sort : public algorithm_module {
         }
     }
 
+    int n{};
+    int *arr;
+
 public:
     quick_sort() : algorithm_module() {}
 
-    ~quick_sort() = default;
+    ~quick_sort() {
+        delete[] arr;
+    }
 
-    int run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big,
-            std::mt19937 &gen) override {
-        int n = dist_big(gen);
-        int *arr = new int[n];
+    int run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) override {
+        quick_sort_impl(arr, 0, n - 1);
+        return n;
+    }
+
+    void setup(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) override {
+        n = dist_big(gen);
+        arr = new int[n];
         for (int j = 0; j < n; j++)
             arr[j] = dist_big(gen);
-        quick_sort_impl(arr, 0, n - 1);
-        delete[] arr;
-        return n;
     }
 };

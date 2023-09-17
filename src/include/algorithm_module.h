@@ -13,8 +13,9 @@ protected:
 public:
     ~algorithm_module() = default;
 
-    [[nodiscard]] virtual int
-    run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) = 0;
+    [[nodiscard]] virtual int run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) = 0;
+
+    virtual void setup(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) = 0;
 };
 
 #endif //PCMTIMER_ALGORITHM_MODULE_H

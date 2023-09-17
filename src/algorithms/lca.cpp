@@ -110,16 +110,20 @@ class lca : public algorithm_module {
         return parent[a];
     }
 
+    int nodes{};
+
 public:
 
-    int run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big,
-            std::mt19937 &gen) override {
-        int nodes = dist_big(gen);
-        tree = random_tree::getRandomTree(nodes);
-        DFS(0,-1);
+    int run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) override {
         int a = dist_big(gen);
         int b = dist_big(gen);
         int lca = LCA(a,b);
         return nodes;
+    }
+
+    void setup(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) override {
+        nodes = dist_big(gen);
+        tree = random_tree::getRandomTree(nodes);
+        DFS(0, -1);
     }
 };

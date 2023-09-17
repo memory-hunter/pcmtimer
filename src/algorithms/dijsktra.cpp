@@ -30,13 +30,20 @@ class dijkstra : public algorithm_module {
         return dist;
     }
 
-public:
-    int run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big,
-            std::mt19937 &gen) override {
-        int vertex = dist_big(gen);
-        int nodes = dist_big(gen);
+    int start{}, vertex{}, nodes{};
+    std::vector<std::vector<std::pair<long, long>>> g{};
 
-        std::vector<std::vector<std::pair<long, long>>> g;
+public:
+    int run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) override {
+        dijkstra_seek(start, g);
+        return vertex;
+    }
+
+    void setup(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big,
+        std::mt19937 &gen) override {
+        vertex = dist_big(gen);
+        nodes = dist_big(gen) % vertex;
+
         g.resize(vertex);
 
         for (int i = 0; i < nodes; i++) {
@@ -48,9 +55,5 @@ public:
         }
 
         int start = dist_small(gen) % vertex;
-
-        dijkstra_seek(start, g);
-
-        return vertex;
     }
 };

@@ -87,20 +87,25 @@ class avl_trees : public algorithm_module {
             search(root->right, val);
         return false;
     }
+    
+    Node *root;
+    int n{};
 
 public:
     avl_trees() : algorithm_module() {}
 
     ~avl_trees() = default;
 
-    int run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big,
-            std::mt19937 &gen) override {
-        int n = dist_big(gen);
-        Node *root = nullptr;
-        for (int j = 0; j < n; j++)
-            root = insert(root, dist_big(gen));
+    int run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) override {
         for (int j = 0; j < n; j++)
             search(root, dist_big(gen));
         return n;
+    }
+
+    void setup(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big,
+            std::mt19937 &gen) override {
+        n = dist_big(gen);
+        for (int j = 0; j < n; j++)
+            root = insert(root, dist_big(gen));
     }
 };
