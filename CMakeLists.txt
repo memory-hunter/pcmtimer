@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(PCM_DIR ${PROJECT_SOURCE_DIR}/pcm)
 option(PCM_BUILD "Build the PCM library" OFF) # OFF for default
 
+add_executable(pcmtimer src/pcmtimer.cpp)
+
 # Check and update for PCM if available
 find_package(Git QUIET)
 if (GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
@@ -51,7 +53,6 @@ if (NOT EXISTS ${PROJECT_SOURCE_DIR}/required/pcm-lib.dll
             "${PROJECT_SOURCE_DIR}/lib/")
 endif ()
 
-add_executable(pcmtimer src/pcmtimer.cpp)
 target_sources(pcmtimer PRIVATE src/runner.cpp src/algorithms/avl_trees.cpp src/algorithms/quick_sort.cpp src/algorithms/dijsktra.cpp)
 target_link_directories(pcmtimer PRIVATE ${PROJECT_SOURCE_DIR}/lib)
 target_link_libraries(pcmtimer PRIVATE pcm-lib restrictDriverAccess)
