@@ -6,7 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(PCM_DIR ${PROJECT_SOURCE_DIR}/pcm)
 option(PCM_BUILD "Build the PCM library" OFF) # OFF for default
 
-add_executable(pcmtimer src/pcmtimer.cpp)
+add_executable(pcmtimer src/pcmtimer.cpp
+        src/algorithms/lca.cpp)
 
 # Check and update for PCM if available
 find_package(Git QUIET)

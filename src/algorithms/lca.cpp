@@ -7,7 +7,7 @@ class lca : public algorithm_module {
     class random_tree {
 
         // using Prufer's algorithm to create random tree
-        std::vector<std::vector<int>> getTreeEdges(std::vector<int> prufer, int m) {
+        static std::vector<std::vector<int>> getTreeEdges(std::vector<int> prufer, int m) {
             int nodes = m + 2;
             std::vector<int> node_set(nodes, 0);
             std::vector<std::vector<int>> randomTree(nodes);
@@ -44,11 +44,11 @@ class lca : public algorithm_module {
             return randomTree;
         }
 
-        int ran(int l, int r) {
+        static int ran(int l, int r) {
             return l + (rand() % (r - l + 1));
         }
 
-        std::vector<std::vector<int>> getRandomTree(int n) {
+        static std::vector<std::vector<int>> getRandomTree(int n) {
             srand(time(0));
             int length = n - 2;
             std::vector<int> arr(length);
@@ -117,6 +117,6 @@ public:
 
     override {
         int nodes = dist_big(gen);
-
+        // TO-DO
     }
 };
