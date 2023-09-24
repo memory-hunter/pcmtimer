@@ -7,8 +7,9 @@
 
 #include "avl_trees.cpp"
 #include "quick_sort.cpp"
-#include "dijsktra.cpp"
+#include "dijkstra.cpp"
 #include "lca.cpp"
+#include "bubble_sort.cpp"
 
 using pcm::PCM;
 
