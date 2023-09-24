@@ -37,17 +37,17 @@ class lca : public algorithm_module {
 
     std::vector<std::vector<int>> _dp;
 
-    int timer{}, lg{};
+    int _timer{}, _lg{};
 
     void DFS(int v, int p) {
         _parent[v] = p;
         _dp[v][0] = p;
 
-        for (int k = 1; k <= lg; k++) {
+        for (int k = 1; k <= _lg; k++) {
             _dp[v][k] = _dp[_dp[v][k - 1]][k - 1];
         }
 
-        _time_in[v] = timer++;
+        _time_in[v] = _timer++;
 
         for (int k = 0; k < _tree[v].size(); k++) {
             int to = _tree[v][k];
@@ -55,7 +55,7 @@ class lca : public algorithm_module {
             DFS(to, v);
         }
 
-        _time_out[v] = timer++;
+        _time_out[v] = _timer++;
     }
 
     bool subtree(int a, int b) {
@@ -68,7 +68,7 @@ class lca : public algorithm_module {
         if (subtree(b, a))
             return b;
 
-        for (int k = lg; k >= 0; k--) {
+        for (int k = _lg; k >= 0; k--) {
             if (_dp[a][k] == 0)
                 continue;
             if (subtree(_dp[a][k], b))
@@ -79,24 +79,24 @@ class lca : public algorithm_module {
         return _parent[a];
     }
 
-    int nodes{}, a{}, b{};
+    int nodes{}, _a{}, _b{};
 
 
 public:
 
     int run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) override {
-        int lca = LCA(a, b);
+        int lca = LCA(_a, _b);
         return nodes;
     }
 
     void setup(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) override {
         nodes = dist_big(gen);
 
-        lg = log2(nodes+1);
+        _lg = log2(nodes+1);
 
         _dp.resize(nodes+1);
         for (int k=0; k<=nodes; k++) {
-            _dp[k].resize(lg+1);
+            _dp[k].resize(_lg + 1);
         }
 
         _time_in.resize(nodes+1);
@@ -105,7 +105,7 @@ public:
 
         _tree = random_tree::getRandomTree(nodes, dist_big, gen);
         DFS(1, 0);
-        a = dist_big(gen) % nodes + 1;
-        b = dist_big(gen) % nodes + 1;
+        _a = dist_big(gen) % nodes + 1;
+        _b = dist_big(gen) % nodes + 1;
     }
 };

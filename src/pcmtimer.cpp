@@ -19,7 +19,7 @@ int main() {
     m->enableForceRTMAbortMode();
     m->checkError(m->program());
 
-    std::unique_ptr<runner> r(new runner(100000, 5));
+    std::unique_ptr<runner> r(new runner(100000, 500));
     r->run(new lca());
     r.reset();
 
