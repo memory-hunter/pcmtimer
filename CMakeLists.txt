@@ -54,7 +54,7 @@ if (NOT EXISTS ${PROJECT_SOURCE_DIR}/required/pcm-lib.dll
             "${PROJECT_SOURCE_DIR}/lib/")
 endif ()
 
-target_sources(pcmtimer PRIVATE src/runner.cpp src/algorithms/avl_trees.cpp src/algorithms/quick_sort.cpp src/algorithms/dijkstra.cpp)
+target_sources(pcmtimer PRIVATE src/runner.cpp src/algorithms/avl_trees.cpp src/algorithms/quick_sort.cpp src/algorithms/dijkstra.cpp src/algorithms/bubble_sort.cpp)
 target_link_directories(pcmtimer PRIVATE ${PROJECT_SOURCE_DIR}/lib)
 target_link_libraries(pcmtimer PRIVATE pcm-lib restrictDriverAccess)
 target_include_directories(pcmtimer PRIVATE src/include src/algorithms ${PCM_DIR}/src)
