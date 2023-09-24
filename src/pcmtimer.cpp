@@ -9,6 +9,7 @@
 #include "quick_sort.cpp"
 #include "dijkstra.cpp"
 #include "lca.cpp"
+#include "bubble_sort.cpp"
 
 using pcm::PCM;
 
