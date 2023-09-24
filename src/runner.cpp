@@ -18,7 +18,7 @@ void runner::run(algorithm_module *algorithm) {
         auto start = std::chrono::high_resolution_clock::now();
         int returned_n = algorithm->run(small_dis, big_dis, gen);
         auto end = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<octosecond>(end - start);
+        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
         SystemCounterState after_state = pcm::getSystemCounterState();
         printer::log_stdout(i, returned_n, duration, before_state, after_state);
         printer::log_file(returned_n, duration, before_state, after_state, file);
