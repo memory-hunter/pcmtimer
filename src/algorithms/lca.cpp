@@ -6,91 +6,60 @@ class lca : public algorithm_module {
 
     class random_tree {
     public:
-        // using Prufer's algorithm to create random tree
-        static std::vector<std::vector<int>> getTreeEdges(std::vector<int> prufer, int m) {
-            int nodes = m + 2;
-            std::vector<int> node_set(nodes, 0);
-            std::vector<std::vector<int>> randomTree(nodes);
+        static std::vector<std::vector<int>> getRandomTree(int n, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) {
+            std::vector<int> elems;
+            std::vector<int> used {1};
+            std::vector<std::vector<int>> tree(n+1);
 
-            for (int i = 0; i < nodes - 2; i++)
-                node_set[prufer[i]-1]++;
+            for (int i = 2; i <= n; i++)
+                elems.emplace_back(i);
+            std::shuffle(elems.begin(), elems.end(), gen);
 
-            for (int i = 0; i < nodes - 2; i++) {
-                for (int j = 0; j < nodes; j++) {
-                    if (node_set[j] == 0) {
-                        node_set[j] = -1;
-                        randomTree[j+1].push_back(prufer[i]);
-                        randomTree[prufer[i]].push_back(j+1);
-                        node_set[prufer[i]-1]--;
-                        break;
-                    }
-                }
+            tree[1].emplace_back(elems[0]);
+            tree[elems[0]].emplace_back(1);
+            used.emplace_back(elems[0]);
+
+            for (int i = 1; i < elems.size(); i++) {
+                int parent = used[(dist_big(gen) % used.size())];
+                tree[parent].emplace_back(elems[i]);
+                tree[elems[i]].emplace_back(parent);
+                used.emplace_back(elems[i]);
             }
 
-            int j = 0; int lastNode = -1; int lastNode1 = -1;
-            // For the last element
-            for (int i = 0; i < nodes; i++) {
-                if (node_set[i] == 0 && j == 0) {
-                    lastNode = i+1;
-                    j++;
-                } else if (node_set[i] == 0 && j == 1) {
-                    lastNode1 = i+1;
-                }
-            }
-
-            randomTree[lastNode].push_back(lastNode1);
-            randomTree[lastNode1].push_back(lastNode);
-
-            return randomTree;
-        }
-
-        static int ran(int l, int r) {
-            return l + (rand() % (r - l + 1));
-        }
-
-        static std::vector<std::vector<int>> getRandomTree(int n) {
-            srand(time(0));
-            int length = n - 2;
-            std::vector<int> arr(length);
-
-            for (int i = 0; i < length; i++) {
-                arr[i] = ran(0, length + 1) + 1;
-            }
-            return getTreeEdges(arr, length);
+            return tree;
         }
     };
 
-    std::vector<std::vector<int>> tree;
+    std::vector<std::vector<int>> _tree;
 
-    std::vector<int> parent;
-    std::vector<int> time_in, time_out;
+    std::vector<int> _parent;
+    std::vector<int> _time_in, _time_out;
 
-    std::vector<std::vector<int>> dp;
+    std::vector<std::vector<int>> _dp;
 
-    int timer;
-    int lg;
+    int _timer{}, _lg{};
 
     void DFS(int v, int p) {
-        parent[v] = p;
-        dp[v][0] = p;
+        _parent[v] = p;
+        _dp[v][0] = p;
 
-        for (int k = 1; k <= lg; k++) {
-            dp[v][k] = dp[dp[v][k - 1]][k - 1];
+        for (int k = 1; k <= _lg; k++) {
+            _dp[v][k] = _dp[_dp[v][k - 1]][k - 1];
         }
 
-        time_in[v] = timer++;
+        _time_in[v] = _timer++;
 
-        for (int k = 0; k < tree[v].size(); k++) {
-            int to = tree[v][k];
+        for (int k = 0; k < _tree[v].size(); k++) {
+            int to = _tree[v][k];
             if (to == p) continue;
             DFS(to, v);
         }
 
-        time_out[v] = timer++;
+        _time_out[v] = _timer++;
     }
 
     bool subtree(int a, int b) {
-        return (time_in[a] <= time_in[b] && time_out[b] <= time_out[a]);
+        return (_time_in[a] <= _time_in[b] && _time_out[b] <= _time_out[a]);
     }
 
     int LCA(int a, int b) {
@@ -99,27 +68,44 @@ class lca : public algorithm_module {
         if (subtree(b, a))
             return b;
 
-        for (int k = lg; k >= 0; k--) {
-            if (dp[a][k] == 0)
+        for (int k = _lg; k >= 0; k--) {
+            if (_dp[a][k] == 0)
                 continue;
-            if (subtree(dp[a][k], b))
+            if (subtree(_dp[a][k], b))
                 continue;
-            a = dp[a][k];
+            a = _dp[a][k];
         }
 
-        return parent[a];
+        return _parent[a];
     }
+
+    int nodes{}, _a{}, _b{};
+
 
 public:
 
-    int run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big,
-            std::mt19937 &gen) override {
-        int nodes = dist_big(gen);
-        tree = random_tree::getRandomTree(nodes);
-        DFS(0,-1);
-        int a = dist_big(gen);
-        int b = dist_big(gen);
-        int lca = LCA(a,b);
+    int run(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) override {
+        int lca = LCA(_a, _b);
         return nodes;
+    }
+
+    void setup(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) override {
+        nodes = dist_big(gen);
+
+        _lg = log2(nodes+1);
+
+        _dp.resize(nodes+1);
+        for (int k=0; k<=nodes; k++) {
+            _dp[k].resize(_lg + 1);
+        }
+
+        _time_in.resize(nodes+1);
+        _time_out.resize(nodes+1);
+        _parent.resize(nodes+1);
+
+        _tree = random_tree::getRandomTree(nodes, dist_big, gen);
+        DFS(1, 0);
+        _a = dist_big(gen) % nodes + 1;
+        _b = dist_big(gen) % nodes + 1;
     }
 };

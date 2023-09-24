@@ -12,8 +12,9 @@ runner::runner(int dis_limit_small, int dis_limit_big, int test_cases) : test_ca
 }
 
 void runner::run(algorithm_module *algorithm) {
-    pcm::SystemCounterState before_state = pcm::getSystemCounterState();
     for (int i = 0; i < test_cases; ++i) {
+        algorithm->setup(small_dis, big_dis, gen);
+        pcm::SystemCounterState before_state = pcm::getSystemCounterState();
         auto start = std::chrono::high_resolution_clock::now();
         int returned_n = algorithm->run(small_dis, big_dis, gen);
         auto end = std::chrono::high_resolution_clock::now();
