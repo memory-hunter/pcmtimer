@@ -20,8 +20,8 @@ int main() {
     m->enableForceRTMAbortMode();
     m->checkError(m->program());
 
-    std::unique_ptr<runner> r(new runner(100000, 500));
-    r->run(new lca());
+    std::unique_ptr<runner> r(new runner(20000, 10));
+    r->run(new bubble_sort());
     r.reset();
 
     std::filesystem::path cd = std::filesystem::current_path();
