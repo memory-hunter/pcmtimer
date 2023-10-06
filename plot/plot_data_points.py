@@ -70,7 +70,7 @@ if p_n2:
     k = 10
     ax1.plot(x, y_n2, color="magenta", label="n^2")
 
-combined_data = [(n[i], runtime[i] // k // n[i], l2[i], l3[i]) for i in range(len(n))]
+combined_data = [(n[i], runtime[i] / k / n[i], l2[i], l3[i]) for i in range(len(n))]
 sorted_data = sorted(combined_data, key=lambda x: x[1], reverse=True)
 top_10_elements = sorted_data[:10]
 bottom_10_elements = sorted_data[-10:]
@@ -83,10 +83,12 @@ f_list = np.array([item[1] * item[0] for item in bottom_10_elements])
 g_list = np.array([item[2] for item in bottom_10_elements])
 h_list = np.array([item[3] for item in bottom_10_elements])
 
-ax1.scatter(n, runtime // k, color='grey', label='Runtime', s=1)
+print(e_list, f_list)
+
+ax1.scatter(n, runtime / k, color='grey', label='Runtime', s=1)
 ax1.scatter(a_list, b_list, color='red', label="Worst constant", s=10)
 ax1.scatter(e_list, f_list, color="green", label="Best constant", s=10)
-ax1.legend()
+ax1.legend(loc='upper right', bbox_to_anchor=(1, 1))
 
 ax2.scatter(n, l2, color='cyan', label='L2', s=1)
 ax2.scatter(n, l3, color='pink', label='L3', s=1)
