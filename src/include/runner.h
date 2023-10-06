@@ -10,7 +10,6 @@
 #include "algorithm_module.h"
 #include "printer.h"
 #include "cpucounters.h"
-#include "time_units.h"
 
 class runner {
     std::random_device rd{};
