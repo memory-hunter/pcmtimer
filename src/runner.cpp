@@ -13,7 +13,8 @@ runner::runner(int dis_limit_small, int dis_limit_big, int test_cases) : test_ca
 
 void runner::run(algorithm_module *algorithm) {
     for (int i = 0; i < test_cases; ++i) {
-        algorithm->setup(small_dis, big_dis, gen);
+        auto array = algorithm->setup_save(small_dis, big_dis, gen);
+        
         pcm::SystemCounterState before_state = pcm::getSystemCounterState();
         auto start = std::chrono::high_resolution_clock::now();
         int returned_n = algorithm->run(small_dis, big_dis, gen);
@@ -22,6 +23,21 @@ void runner::run(algorithm_module *algorithm) {
         SystemCounterState after_state = pcm::getSystemCounterState();
         printer::log_stdout(i, returned_n, duration, before_state, after_state);
         printer::log_file(returned_n, duration, before_state, after_state, file);
+
+        Sleep(1000);
+
+        algorithm->copy(array);
+
+        before_state = pcm::getSystemCounterState();
+        start = std::chrono::high_resolution_clock::now();
+        returned_n = algorithm->run(small_dis, big_dis, gen);
+        end = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+        after_state = pcm::getSystemCounterState();
+        printer::log_stdout(i, returned_n, duration, before_state, after_state);
+        printer::log_file(returned_n, duration, before_state, after_state, file);
+
+        Sleep(1000);
     }
 }
 

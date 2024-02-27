@@ -20,7 +20,7 @@ int main() {
     m->enableForceRTMAbortMode();
     m->checkError(m->program());
 
-    std::unique_ptr<runner> r(new runner(20000, 10));
+    std::unique_ptr<runner> r(new runner(20000, 100));
     r->run(new bubble_sort());
     r.reset();
 

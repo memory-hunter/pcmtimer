@@ -33,4 +33,19 @@ public:
         for (int j = 0; j < n; j++)
             arr[j] = dist_big(gen);
     }
+
+    std::vector<int> setup_save(std::uniform_int_distribution<> &dist_small, std::uniform_int_distribution<> &dist_big, std::mt19937 &gen) override {
+        n = dist_big(gen);
+        arr = new int[n];
+        for (int j = 0; j < n; j++)
+            arr[j] = dist_big(gen);
+        return std::vector<int>(arr, arr + n);
+    }
+
+    void copy(std::vector<int> &arr) override {
+        n = arr.size();
+        this->arr = new int[n];
+        for (int i = 0; i < n; i++)
+            this->arr[i] = arr[i];
+    }
 };
