@@ -1,4 +1,4 @@
 [submodule "pcm"]
-    path = path/to/submodule
+    path = pcm
     url = https://github.com/intel/pcm
     branch = master
