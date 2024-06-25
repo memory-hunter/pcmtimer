@@ -6,7 +6,7 @@ The template provides a modular system, there is an algorithm `runner`, which pr
 
 The goal of this code is to check if the cache hit ratios are the culprit of having **`out-of-runtime execution times`**, meaning that it is observed that sometimes, for any algorithm, we don't get the expected runtime for an arbitrary n number of elements.
 
-This code is provided as my and my coursemates' bachelor's thesis work at [Kutaisi International University](https://www.kiu.edu.ge/).
+This code is provided as my and my coursemates' bachelor's thesis work at [Kutaisi International University](https://www.kiu.edu.ge/). Paper is yet unlisted; hope to be published soon.
 
 # Requirements
 - Windows operating system (preferably > 10)
@@ -20,5 +20,6 @@ This code is provided as my and my coursemates' bachelor's thesis work at [Kutai
 - Run the `pcmtimer.exe` from the `{project_root}/bin/{config}/` directory with administrator privilleges.
 
 # Credits
-- Mentor: [Wolfgang J. Paul](https://ieeexplore.ieee.org/author/37387171500)
+- Supervisor: [Wolfgang J. Paul](https://ieeexplore.ieee.org/author/37387171500)
+- Reviewer: [Walter F. Tichy](https://scholar.google.com/citations?user=23RPQBQAAAAJ&hl=en)
 - Students: [Davit Petriashvili](https://www.linkedin.com/in/memoryhunter/), [Lasha Kvatashidze](https://www.linkedin.com/in/lasha-kvatashidze-75b980219/)
